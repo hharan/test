@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Canine Company Mobile App API</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <style type="text/css">
+    body {
+  font: 13px "Lucida Grande", "Lucida Sans Unicode", arial, sans-serif;
+  line-height: 1.53846; /* 20px */
+  color: #4a3f2d;
+}
+
+:focus {
+  outline: 0;
+}
+
+h1, h2 {
+  font-weight:normal;
+}
+
+h3 {
+  font-size: 100%;
+  font-weight: bold;
+}
+ul, li {
+  margin:0px;
+  padding:0px;
+}
+
+ul {
+  margin-left:40px;
+}
+
+ul > li {
+  list-style:disc;
+  margin:10px 0px;
+}
+
+hr {
+  border:none;
+  width:98%;
+  margin-left:-10px;
+  border-top:1px solid #CCCCCC;
+  border-bottom:1px solid #FFFFFF;
+}
+code,
+pre {
+  border: 1px solid #CCCCCC;
+  background: #f2f0ee;
+  -webkit-border-radius:2px;
+  -moz-border-radius:2px;
+  border-radius:2px;
+  white-space:pre-wrap;
+}
+code {
+  padding: 0 0.2em;
+}
+pre {
+  margin: 1em 0;
+  padding: .75em;
+  overflow: auto;
+  padding:10px 1.2em;
+  margin-top:0;
+  margin-bottom:20px;
+}
+pre code  {
+  border: medium none;
+  padding: 0;
+}
+a code {
+  text-decoration: underline;
+}
+
+a {
+  color:#FD6512;
+  text-decoration:none;
+}
+
+h4 {
+  font-size: 85%;
+  margin: 0;
+  padding: 0;
+  line-height: 1em;
+  display: inline;
+}
+
+/* tables still need cellspacing="0" in the markup */
+table {
+  border-collapse:collapse; border-spacing:0;
+  margin: 20px 0;
+}
+th,
+td {
+  border: solid #aaa;
+  border-width: 1px 0;
+  line-height: 23px;
+  padding: 0 12px;
+  text-align: left;
+  vertical-align: text-bottom;
+}
+th {
+  border-collapse: separate;
+}
+tbody tr:nth-child(odd) {
+  background-color: #f2f0ee;
+}
+
+/* ---- custom classes */
+
+pre.shell,
+pre.shell code {
+  background:#444;
+  color:#fff;
+  border-width:0px;
+}
+pre.shell code::before {
+  content: '$ ';
+  display: inline;
+}
+
+/* ---- header and sidebar */
+
+#header {
+  background:#C3BDB3;
+  background:#1C313C;
+  height:66px;
+  left:0px;
+  position:absolute;
+  top:0px;
+  width:100%;
+  z-index:1;
+  font-size:0.7em;
+}
+#header h1 {
+  width: 424px;
+  height: 35px;
+  display:block;
+  background: url(../img/logo.png) no-repeat;
+  line-height:2.1em;
+  padding:0;
+  padding-left:140px;
+  margin-top:18px;
+  margin-left:20px;
+  color:white;
+  text-transform: uppercase;
+}
+
+#sidebar {
+  background-color:#EDEBEA;
+  bottom:0px;
+  left:0px;
+  overflow:auto;
+  padding:20px 0px 0px 15px;
+  position:absolute;
+  top:66px;
+  width:265px;
+ z-index:1;
+}
+
+#content {
+  top:64px;
+  bottom:0px;
+  right:0px;
+  left:290px;
+  padding:20px 30px 400px;
+  position:absolute;
+  overflow:auto;
+  z-index:0;
+}
+
+#sidebar .vertical_divider {
+  background-color:#FFFFFF;
+  bottom:0px;
+  position:absolute;
+  top:0px;
+  right:0px;
+  width:1px;
+}
+#sidebar h1 {
+  font-size:1.2em;
+  padding:0px;
+  margin-top:15px;
+  margin-bottom:3px;
+}
+
+#sidebar ul {
+  margin:3px 0 10px 10px;
+}
+
+#sidebar li {
+  margin:0;
+  padding:0;
+  font-size:0.9em;
+}
+
+#sidebar li,
+#sidebar li a {
+  color:#5C5954;
+}
+#sidebar li {
+  list-style:none;
+ padding:1px 0px 1px 0px;
+  white-space: nowrap;
+}
+
+#sidebar li span.verb {
+  color: #999;
+  width:4em;
+  display:inline-block;
+  font-size:9px;
+  font-family:verdana;
+  margin-right:5px;
+}
+#sidebar span.both .endpoint {
+  display: none;
+}
+#content span.both .endpoint {
+  color: #999;
+  font-size: 80%;
+}
+
+#sidebar li div.current {
+  background: -moz-linear-gradient(left, rgba(227,222,217,0) 0%, rgba(193,185,173,1) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(227,222,217,0)), color-stop(100%,rgba(193,185,173,1))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(left, rgba(227,222,217,0) 0%,rgba(193,185,173,1) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(left, rgba(227,222,217,0) 0%,rgba(193,185,173,1) 100%); /* Opera11.10+ */
+  background: -ms-linear-gradient(left, rgba(227,222,217,0) 0%,rgba(193,185,173,1) 100%); /* IE10+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00e3ded9', endColorstr='#c1b9ad',GradientType=1 ); /* IE6-9 */
+  background: linear-gradient(left, rgba(227,222,217,0) 0%,rgba(193,185,173,1) 100%); /* W3C */
+}
+
+/* ---- intro */
+
+.intro {
+  color:#29231A;
+  padding: 22px 25px;
+  background: #EDEBEA;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  margin-bottom:40px;
+}
+.intro pre.base {
+  background:#444;
+  color:#29231A;
+  color:#fff;
+  border-color:#fff;
+  font-size:1.5em;
+}
+.intro h1 {
+  color: #1C313C;
+}
+.intro ul {
+ list-style-type:disc;
+  padding-left:20px;
+  margin-left:0;
+}
+.intro ul li {
+  margin: 0;
+}
+
+
+#content h1 {
+  margin-top: 60px;
+  border-bottom: 2px solid #979592;
+}
+#content h1:first-child {
+  margin-top: 0;
+  border-bottom: none;
+}
+
+#content h2 {
+  overflow: auto;
+  margin-top: 40px;
+  border-bottom: 1px dotted #979592;
+  z-index: 3;
+}
+h1 + h2 {
+  margin-top: 0px;
+}
+
+h3 {
+  margin-top: 20px;
+}
+h3:first-child {
+  margin-top: 0;
+}
+/*---- print media */
+
+@media print {
+  body { background:white; color:black; margin:0; }
+  #sidebar {
+    display: none;
+  } 
+  #content {
+    position: relative;
+    padding: 5px;
+    left: 0px;
+    top: 0px;
+  } 
+  h1, h2, h4 {
+    page-break-after: avoid;
+  } 
+  pre {
+    page-break-inside: avoid;
+    border: 1px solid #CCCCCC !important;
+  } 
+  pre, code {
+    background: white !important;
+    color: black !important;
+ } 
+} 
+    </style>
+</head>
+<body>
+<div id="header">
+    <h1>Canine Company Mobile App API Documentation</h1>
+</div>
+
+    <div id="sidebar">
+<ul>
+  <li><div><a href="#users">Users</a></div>
+  <ul>
+    <li><div><a href="#POST-/login"><span class="method justendpoint"><span class="endpoint"><span class="verb">POST</span> <span class="path">/login</span></span></span></a></div></li>
+    <li><div><a href="#GET-/user/:id"><span class="method justendpoint"><span class="endpoint"><span class="verb">GET</span> <span class="path">/user/:id</span></span></span></a></div></li>
+    <li><div><a href="#PUT-/user/:id"><span class="method justendpoint"><span class="endpoint"><span class="verb">PUT</span> <span class="path">/user/:id</span></span></span></a></div></li>
+    <li><div><a href="#POST-/user/"><span class="method justendpoint"><span class="endpoint"><span class="verb">POST</span> <span class="path">/user/</span></span></span></a></div></li>
+  </ul></li>
+  <li><div><a href="#dogs">Dogs</a></div>
+  <ul>
+    <li><div><a href="#GET-/dog"><span class="method justendpoint"><span class="endpoint"><span class="verb">GET</span> <span class="path">/dog</span></span></span></a></div></li>
+    <li><div><a href="#GET-/dog/:id"><span class="method justendpoint"><span class="endpoint"><span class="verb">GET</span> <span class="path">/dog/:id</span></span></span></a></div></li>
+    <li><div><a href="#POST-/dog"><span class="method justendpoint"><span class="endpoint"><span class="verb">POST</span> <span class="path">/dog</span></span></span></a></div></li>
+    <li><div><a href="#PUT-/dog/:id"><span class="method justendpoint"><span class="endpoint"><span class="verb">PUT</span> <span class="path">/dog/:id</span></span></span></a></div></li>
+  </ul></li>
+  <li><div><a href="#battery-plans">Battery Plans</a></div>
+  <ul>
+    <li><div><a href="#GET-/battery_plans"><span class="method justendpoint"><span class="endpoint"><span class="verb">GET</span> <span class="path">/battery_plans</span></span></span></a></div></li>
+  </ul></li>
+  <li><div><a href="#service-plan">Service Plan</a></div>
+  <ul>
+    <li><div><a href="#GET-/service_plan"><span class="method justendpoint"><span class="endpoint"><span class="verb">GET</span> <span class="path">/service_plan</span></span></span></a></div></li>
+  </ul></li>
+  <li><div><a href="#warranty">Warranty</a></div>
+  <ul>
+    <li><div><a href="#GET-/warranty"><span class="method justendpoint"><span class="endpoint"><span class="verb">GET</span> <span class="path">/warranty</span></span></span></a></div></li>
+  </ul></li>
+  <li><div><a href="#history">History</a></div>
+  <ul>
+    <li><div><a href="#GET-/history"><span class="method justendpoint"><span class="endpoint"><span class="verb">GET</span> <span class="path">/history</span></span></span></a></div></li>
+  </ul></li>
+  <li><div><a href="#ecommerce">ECommerce</a></div>
+  <ul>
+    <li><div><a href="#GET-/ccdetails"><span class="method justendpoint"><span class="endpoint"><span class="verb">GET</span> <span class="path">/ccdetails</span></span></span></a></div></li>
+    <li><div><a href="#POST-/ccdetails"><span class="method justendpoint"><span class="endpoint"><span class="verb">POST</span> <span class="path">/ccdetails</span></span></span></a></div></li>
+  </ul></li>
+  <li><div><a href="#bookingpurchase">Booking/Purchase</a></div>
+  <ul>
+    <li><div><a href="#invisible-fence-service">Invisible Fence Service</a></div></li>
+    <li><div><a href="#GET-/fence_service/available_dates">GET /fence<em>service/available</em>dates</a></div></li>
+    <li><div><a href="#POST-/fence_service/lock_time">POST /fence<em>service/lock</em>time</a></div></li>
+    <li><div><a href="#POST-/fence_service/unlock_time">POST /fence<em>service/unlock</em>time</a></div></li>
+    <li><div><a href="#POST-/fence_service/booking"><span class="method justendpoint"><span class="endpoint"><span class="verb">POST</span> <span class="path">/fence_service/booking</span></span></span></a></div></li>
+    <li><div><a href="#spa">Spa</a></div></li>
+    <li><div><a href="#GET-/spa_service/available_dates">GET /spa<em>service/available</em>dates</a></div></li>
+    <li><div><a href="#GET-/spa_service/available_addons">GET /spa<em>service/available</em>addons</a></div></li>
+    <li><div><a href="#POST-/spa_service/lock_time">POST /spa<em>service/lock</em>time</a></div></li>
+    <li><div><a href="#POST-/spa_service/unlock_time">POST /spa<em>service/unlock</em>time</a></div></li>
+    <li><div><a href="#POST-/spa_service/booking"><span class="method justendpoint"><span class="endpoint"><span class="verb">POST</span> <span class="path">/spa_service/booking</span></span></span></a></div></li>
+  </ul></li>
+  <li><div><a href="#notifications">Notifications</a></div>
+  <ul>
+    <li><div><a href="#GET-/notifications"><span class="method justendpoint"><span class="endpoint"><span class="verb">GET</span> <span class="path">/notifications</span></span></span></a></div></li>
+  </ul></li>
+  <li><div><a href="#tips-tricks">Tips &amp; Tricks</a></div>
+  <ul>
+    <li><div><a href="#GET-/tips"><span class="method justendpoint"><span class="endpoint"><span class="verb">GET</span> <span class="path">/tips</span></span></span></a></div></li>
+  </ul></li>
+  <li><div><a href="#seasonal-information">Seasonal Information</a></div>
+  <ul>
+    <li><div><a href="#GET-/seasonalinfo"><span class="method justendpoint"><span class="endpoint"><span class="verb">GET</span> <span class="path">/seasonalinfo</span></span></span></a></div></li>
+  </ul></li>
+  <li><div><a href="#photo-fun">Photo Fun</a></div>
+  <ul>
+    <li><div><a href="#POST-/photo"><span class="method justendpoint"><span class="endpoint"><span class="verb">POST</span> <span class="path">/photo</span></span></span></a></div></li>
+  </ul></li>
+  <li><div><a href="#pet-friendly-locations">Pet friendly locations</a></div>
+  <ul>
+    <li><div><a href="#GET-/petfriendlylocations"><span class="method justendpoint"><span class="endpoint"><span class="verb">GET</span> <span class="path">/petfriendlylocations</span></span></span></a></div></li>
+    <li><div><a href="#POST-/petfriendlylocation"><span class="method justendpoint"><span class="endpoint"><span class="verb">POST</span> <span class="path">/petfriendlylocation</span></span></span></a></div></li>
+  </ul></li>
+</ul>
+
+    </div>
+    <div id="content">
+<br>
+<h1>Canine Company API requirements for communicating with the Datacenter.</h1>
+<div class="intro">
+
+
+<h3>All API calls start with a base URL</h3>
+
+<p>something like</p>
+
+<pre class="base">
+https://www.caninecompany.com/api/v1/
+</pre>
+
+<h3>Path</h3>
+
+<p>For this documentation, we will assume every request begins with the above path.</p>
+
+<h3>Format</h3>
+
+<p>All calls are returned in <strong>JSON</strong> or <strong>XML</strong></p>
+
+<h3>Status Codes</h3>
+
+<ul>
+<li><strong>200</strong> Successful GET and PUT.</li>
+<li><strong>201</strong> Successful POST.</li>
+<li><strong>202</strong> Successful Provision queued.</li>
+<li><strong>204</strong> Successful DELETE</li>
+<li><strong>401</strong> Unauthenticated.</li>
+<li><strong>403</strong> Forbidden.</li>
+<li><strong>409</strong> Unsuccessful POST, PUT, or DELETE (Will return an errors object)</li>
+</ul>
+
+
+</div>
+<h1 id="users">Users</h1>
+
+<h2 id="POST-/login"><span class="method justendpoint"><span class="endpoint"><span class="verb">POST</span> <span class="path">/login</span></span></span></h2>
+
+<p>Service used to authenticate the user in the app. </p>
+
+<h4 id="parameters">Parameters</h4>
+
+<h6 id="email">email</h6>
+
+<h6 id="password">password</h6>
+
+<h4 id="example-request">example request</h4>
+
+<pre class="shell"><code>curl -H "Accept: application/xml" -X POST -d "email":"text@example.com","password":"hash/encrypted value" https://www.caninecompany.com/api/v1/login
+</code></pre>
+
+<h4 id="response">response</h4>
+
+<pre><code>&lt;xml&gt;
+    &lt;status&gt;success&lt;/status&gt;
+    &lt;user_id&gt;xxxxxxxx&lt;/user_id&gt;
+    &lt;token&gt;auth token&lt;/token&gt;
+&lt;/xml&gt;
+</code></pre>
+
+<p>auth token will be passed in the authentication header (HMAC) for all other calls.</p>
+
+<h2 id="GET-/user/:id"><span class="method justendpoint"><span class="endpoint"><span class="verb">GET</span> <span class="path">/user/:id</span></span></span></h2>
+
+<p>Get a user detail using user id. </p>
+
+<h4 id="example-request-2">example request</h4>
+
+<pre class="shell"><code>curl -H "Authentication: hmac auth token digest" -H "Accept: application/xml" https://www.caninecompany.com/api/v1/user/&lt;user_id&gt;
+</code></pre>
+
+<h4 id="response-2">response</h4>
+
+<pre><code>&lt;xml&gt;
+    &lt;status&gt;success&lt;/status&gt;
+    &lt;user_name&gt;...&lt;/user_name&gt;
+    &lt;address&gt;...&lt;/address&gt;
+    &lt;email&gt;...&lt;/email&gt;
+    &lt;phone&gt;...&lt;/phone&gt;
+&lt;/xml&gt;
+</code></pre>
+
+<h2 id="PUT-/user/:id"><span class="method justendpoint"><span class="endpoint"><span class="verb">PUT</span> <span class="path">/user/:id</span></span></span></h2>
+
+<p>Modified user data</p>
+
+<h4 id="example-request-3">example request</h4>
+
+<pre class="shell"><code>curl -H "Authentication: hmac auth token digest" -H "Accept: application/xml" -X PUT https://www.caninecompany.com/api/v1/user/&lt;user_id&gt;
+</code></pre>
+
+<h4 id="response-3">response</h4>
+
+<pre><code>&lt;xml&gt;
+    &lt;status&gt;success&lt;/status&gt;
+    &lt;user_name&gt;...&lt;/user_name&gt;
+    &lt;address&gt;...&lt;/address&gt;
+    &lt;email&gt;...&lt;/email&gt;
+    &lt;phone&gt;...&lt;/phone&gt;
+&lt;/xml&gt;
+</code></pre>
+
+<h2 id="POST-/user/"><span class="method justendpoint"><span class="endpoint"><span class="verb">POST</span> <span class="path">/user/</span></span></span></h2>
+
+<p>Registers a new user</p>
+
+<h4 id="example-request-4">example request</h4>
+
+<pre class="shell"><code>curl -H "Accept: application/xml" -X POST -d "email":"...","password":"...","name":"...", "phone":"...", "address":"..." https://www.caninecompany.com/api/v1/user
+</code></pre>
+
+<h4 id="response-4">response</h4>
+
+<pre><code>&lt;xml&gt;
+    &lt;status&gt;success&lt;/status&gt;
+    &lt;user_id&gt;...&lt;/user_id&gt;
+    &lt;token&gt;auth token&lt;/token&gt;
+&lt;/xml&gt;
+</code></pre>
+
+<h1 id="dogs">Dogs</h1>
+
+<h2 id="GET-/dog"><span class="method justendpoint"><span class="endpoint"><span class="verb">GET</span> <span class="path">/dog</span></span></span></h2>
+
+<p>Gets the list of dogs for the user.</p>
+
+<h4 id="example-request-5">example request</h4>
+
+<pre class="shell"><code>curl -H "Authentication:..." -H "Accept: application/xml" https://www.caninecompany.com/api/v1/dog
+</code></pre>
+
+<h4 id="response-5">response</h4>
+
+<pre><code>&lt;xml&gt;
+    &lt;status&gt;success&lt;/status&gt;
+    &lt;dogs&gt;
+        &lt;dog_id&gt;...&lt;/dog_id&gt;
+        &lt;dog_id&gt;...&lt;/dog_id&gt;
+    &lt;/dogs&gt;
+&lt;/xml&gt;
+</code></pre>
+
+<h2 id="GET-/dog/:id"><span class="method justendpoint"><span class="endpoint"><span class="verb">GET</span> <span class="path">/dog/:id</span></span></span></h2>
+
+<p>Gets dog details for the user.</p>
+
+<h4 id="example-request-6">example request</h4>
+
+<pre class="shell"><code>curl -H "Authentication:..." -H "Accept: application/xml" https://www.caninecompany.com/api/v1/dog/:id
+</code></pre>
+
+<h4 id="response-6">response</h4>
+
+<pre><code>&lt;xml&gt;
+    &lt;status&gt;success&lt;/status&gt;
+    &lt;name&gt;...&lt;/name&gt;
+    &lt;breed&gt;...&lt;/breed&gt;
+    &lt;sex&gt;...&lt;/sex&gt;
+    &lt;age&gt;...&lt;/age&gt;
+    &lt;status&gt;...&lt;/status&gt;
+&lt;/xml&gt;
+</code></pre>
+
+<h2 id="POST-/dog"><span class="method justendpoint"><span class="endpoint"><span class="verb">POST</span> <span class="path">/dog</span></span></span></h2>
+
+<p>Creates a new Dog record for the user</p>
+
+<h4 id="parameters-2">Parameters</h4>
+
+<h6 id="name">name</h6>
+
+<h6 id="breed">breed</h6>
+
+<h6 id="sex">sex</h6>
+
+<h6 id="age">age</h6>
+
+<h6 id="status-deadalivequalified-for-service">status ( dead/alive,qualified for service)</h6>
+
+<h4 id="example-request-7">example request</h4>
+
+<pre class="shell"><code>curl -H "Authentication:..." -H "Accept: application/xml" -X POST -d ... https://www.caninecompany.com/api/v1/dog
+</code></pre>
+
+<h4 id="response-7">response</h4>
+
+<pre><code>&lt;xml&gt;
+    &lt;status&gt;success&lt;/status&gt;
+    &lt;dog_id&gt;...&lt;/dog_id&gt;
+&lt;/xml&gt;
+</code></pre>
+
+<h2 id="PUT-/dog/:id"><span class="method justendpoint"><span class="endpoint"><span class="verb">PUT</span> <span class="path">/dog/:id</span></span></span></h2>
+
+<p>Updates existing Dog record for the user</p>
+
+<h4 id="parameters-3">Parameters</h4>
+
+<h6 id="dog_id">dog_id</h6>
+
+<h6 id="name-2">name</h6>
+
+<h6 id="breed-2">breed</h6>
+
+<h6 id="sex-2">sex</h6>
+
+<h6 id="age-2">age</h6>
+
+<h6 id="status-deadalivequalified-for-service-2">status ( dead/alive,qualified for service)</h6>
+
+<h4 id="example-request-8">example request</h4>
+
+<pre class="shell"><code>curl -H "Authentication:..." -H "Accept: application/xml" -X PUT -d ... https://www.caninecompany.com/api/v1/dog/:id
+</code></pre>
+
+<h4 id="response-8">response</h4>
+
+<pre><code>&lt;xml&gt;
+    &lt;status&gt;success&lt;/status&gt;
+&lt;/xml&gt;
+</code></pre>
+
+<h1 id="battery-plans">Battery Plans</h1>
+
+<h2 id="GET-/battery_plans"><span class="method justendpoint"><span class="endpoint"><span class="verb">GET</span> <span class="path">/battery_plans</span></span></span></h2>
+
+<p>Get details about battery plan subscriptions for the user.</p>
+
+<h4 id="example-request-9">example request</h4>
+
+<pre class="shell"><code>curl -H "Authentication: hmac auth token digest" -H "Accept: application/xml" https://www.caninecompany.com/api/v1/battery_plans
+</code></pre>
+
+<h4 id="response-9">response</h4>
+
+<pre><code>&lt;xml&gt;
+    &lt;status&gt;success&lt;/status&gt;
+    &lt;subscriptions&gt;
+        &lt;subscription&gt;
+            &lt;battery_type&gt;...&lt;battery_type&gt;
+            &lt;status&gt;...&lt;/status&gt;
+            &lt;expiration_date&gt;...&lt;/expiration_date&gt;
+            &lt;ship_count&gt;...&lt;/ship_count&gt;
+            &lt;frequency&gt;...&lt;/frequency&gt;
+            &lt;last_shipment_date&gt;...&lt;/last_shipment_date&gt;
+            &lt;next_shipment_date&gt;...&lt;/next_shipment_date&gt;
+            &lt;auto_renewal_status&gt;...&lt;/auto_renewal_status&gt;
+            ...
+        &lt;/subscription&gt;
+        ...
+    &lt;/subscriptions&gt;
+&lt;/xml&gt;
+</code></pre>
+
+<h1 id="service-plan">Service Plan</h1>
+
+<h2 id="GET-/service_plan"><span class="method justendpoint"><span class="endpoint"><span class="verb">GET</span> <span class="path">/service_plan</span></span></span></h2>
+
+<p>Get details about user service plan.</p>
+
+<h4 id="example-request-10">example request</h4>
+
+<pre class="shell"><code>curl -H "Authentication: hmac auth token digest" -H "Accept: application/xml" https://www.caninecompany.com/api/v1/service_plan
+</code></pre>
+
+<h4 id="response-10">response</h4>
+
+<pre><code>&lt;xml&gt;
+    &lt;status&gt;success&lt;/status&gt;
+    &lt;service_plan&gt;
+            &lt;status&gt;...&lt;/status&gt;
+            &lt;expiration_date&gt;...&lt;/expiration_date&gt;
+            &lt;auto_renewal_status&gt;...&lt;/auto_renewal_status&gt;
+            &lt;num_pets&gt;...&lt;/num_pets&gt;
+            ...
+    &lt;/service_plan&gt;
+&lt;/xml&gt;
+</code></pre>
+
+<h1 id="warranty">Warranty</h1>
+
+<h2 id="GET-/warranty"><span class="method justendpoint"><span class="endpoint"><span class="verb">GET</span> <span class="path">/warranty</span></span></span></h2>
+
+<p>Get details about user warranties</p>
+
+<h4 id="example-request-11">example request</h4>
+
+<pre class="shell"><code>curl -H "Authentication: hmac auth token digest" -H "Accept: application/xml" https://www.caninecompany.com/api/v1/warranty
+</code></pre>
+
+<h4 id="response-11">response</h4>
+
+<pre><code>&lt;xml&gt;
+    &lt;status&gt;success&lt;/status&gt;
+    &lt;products&gt;
+        &lt;product&gt;
+            &lt;name&gt;...&lt;/name&gt;
+            &lt;serial_number&gt;...&lt;/serial_number&gt;
+            &lt;expiration_date&gt;...&lt;/expiration_date&gt;
+            &lt;auto_renewal_status&gt;...&lt;/auto_renewal_status&gt;
+            &lt;warranty_status&gt;...&lt;/warranty_status&gt;
+            &lt;purchase_date&gt;...&lt;/purchase_date&gt;
+            ...
+            &lt;/product&gt;
+            ...
+    &lt;/products&gt;
+&lt;/xml&gt;
+</code></pre>
+
+<h1 id="history">History</h1>
+
+<h2 id="GET-/history"><span class="method justendpoint"><span class="endpoint"><span class="verb">GET</span> <span class="path">/history</span></span></span></h2>
+
+<p>Gets user history</p>
+
+<h4 id="example-request-12">example request</h4>
+
+<pre class="shell"><code>curl -H "Authentication: hmac auth token digest" -H "Accept: application/xml" https://www.caninecompany.com/api/v1/history
+</code></pre>
+
+<h4 id="response-12">response</h4>
+
+<pre><code>&lt;xml&gt;
+    &lt;status&gt;success&lt;/status&gt;
+    &lt;items&gt;
+        &lt;item&gt;
+            &lt;date&gt;...&lt;/date&gt;
+            &lt;type&gt;...&lt;/type&gt;
+            &lt;rep_name&gt;...&lt;/rep_name&gt;
+            &lt;notes&gt;...&lt;/notes&gt;
+            &lt;invoice_items&gt;...&lt;/invoice_items&gt;
+            &lt;time&gt;...&lt;/time&gt;
+            &lt;delivery_address&gt;...&lt;/delivery_address&gt;
+            &lt;shipment_tracking_info&gt;...&lt;/shipment_tracking_info&gt;
+            ...
+            &lt;/item&gt;
+            ...
+    &lt;/items&gt;
+&lt;/xml&gt;
+</code></pre>
+
+<h1 id="ecommerce">ECommerce</h1>
+
+<h2 id="GET-/ccdetails"><span class="method justendpoint"><span class="endpoint"><span class="verb">GET</span> <span class="path">/ccdetails</span></span></span></h2>
+
+<p>Gets user credit card details</p>
+
+<h4 id="example-request-13">example request</h4>
+
+<pre class="shell"><code>curl -H "Authentication: hmac auth token digest" -H "Accept: application/xml" https://www.caninecompany.com/api/v1/ccdetails
+</code></pre>
+
+<h4 id="response-13">response</h4>
+
+<pre><code>&lt;xml&gt;
+    &lt;status&gt;success&lt;/status&gt;
+    &lt;cards&gt;
+    &lt;card&gt;
+    ...
+    &lt;/card&gt;
+    ...
+    &lt;/cards&gt;
+&lt;/xml&gt;
+</code></pre>
+
+<h2 id="POST-/ccdetails"><span class="method justendpoint"><span class="endpoint"><span class="verb">POST</span> <span class="path">/ccdetails</span></span></span></h2>
+
+<p>Adds new credit card to user</p>
+
+<h4 id="parameters-4">Parameters</h4>
+
+<h6 id="cardnumber">cardnumber</h6>
+
+<h6 id="name-3">name</h6>
+
+<h6 id="expirydate">expirydate</h6>
+
+<h6 id="cvc-code">CVC code</h6>
+
+<h6 id="billing-address-if-different-from-user-address">Billing address if different from user address</h6>
+
+<h4 id="example-request-14">example request</h4>
+
+<pre class="shell"><code>curl -H "Accept: application/xml" -X POST -d "cardnumber":"...","name":"...","expirydate":"...","cvc":"...","address":"..."  https://www.caninecompany.com/api/v1/ccdetails
+</code></pre>
+
+<h4 id="response-14">response</h4>
+
+<pre><code>&lt;xml&gt;
+    &lt;status&gt;success&lt;/status&gt;
+&lt;/xml&gt;
+</code></pre>
+
+<h1 id="bookingpurchase">Booking/Purchase</h1>
+
+<h2 id="invisible-fence-service">Invisible Fence Service</h2>
+
+<h2 id="GET-/fence_service/available_dates">GET /fence<em>service/available</em>dates</h2>
+
+<p>Gets the available date/time for fence service.</p>
+
+<h4 id="example-request-15">example request</h4>
+
+<pre class="shell"><code>curl -H "Authentication:..." -H "Accept: application/xml" https://www.caninecompany.com/api/v1/fence_service/available_dates
+</code></pre>
+
+<h4 id="response-15">response</h4>
+
+<pre><code>&lt;xml&gt;
+    &lt;status&gt;success&lt;/status&gt;
+    &lt;available_datetime&gt;...&lt;/available_datetime&gt;
+    &lt;cost&gt;...&lt;/cost&gt;
+    ...
+&lt;/xml&gt;
+</code></pre>
+
+<h2 id="POST-/fence_service/lock_time">POST /fence<em>service/lock</em>time</h2>
+
+<p>Service used to temporarily lock the appointment time while the user is entering other details.</p>
+
+<h4 id="parameters-5">Parameters</h4>
+
+<h6 id="date">date</h6>
+
+<h6 id="time">time</h6>
+
+<h4 id="example-request-16">example request</h4>
+
+<pre class="shell"><code>curl -H "Accept: application/xml" -X POST -d "date":"...","time":"..." ... https://www.caninecompany.com/api/v1/fence_service/lock_time
+</code></pre>
+
+<h4 id="response-16">response</h4>
+
+<pre><code>&lt;xml&gt;
+    &lt;status&gt;success&lt;/status&gt;
+&lt;/xml&gt;
+</code></pre>
+
+<h2 id="POST-/fence_service/unlock_time">POST /fence<em>service/unlock</em>time</h2>
+
+<p>Service used to unlock the appointment time if the user cancels the process.</p>
+
+<h4 id="parameters-6">Parameters</h4>
+
+<h6 id="date-2">date</h6>
+
+<h6 id="time-2">time</h6>
+
+<h4 id="example-request-17">example request</h4>
+
+<pre class="shell"><code>curl -H "Accept: application/xml" -X POST -d "date":"...","time":"..." ... https://www.caninecompany.com/api/v1/fence_service/unlock_time
+</code></pre>
+
+<h4 id="response-17">response</h4>
+
+<pre><code>&lt;xml&gt;
+    &lt;status&gt;success&lt;/status&gt;
+&lt;/xml&gt;
+</code></pre>
+
+<h2 id="POST-/fence_service/booking"><span class="method justendpoint"><span class="endpoint"><span class="verb">POST</span> <span class="path">/fence_service/booking</span></span></span></h2>
+
+<p>Service used to create a new fence service appointment.</p>
+
+<h4 id="parameters-7">Parameters</h4>
+
+<h6 id="date-3">date</h6>
+
+<h6 id="time-3">time</h6>
+
+<h6 id="reason-upgrade-change-layout-repair-other">reason ( Upgrade, change layout, repair, other)</h6>
+
+<h6 id="address">address</h6>
+
+<h6 id="cc-info">cc info</h6>
+
+<h6 id="more-than-3-acres">more than 3 acres?</h6>
+
+<h6 id="major-changes-to-property">major changes to property?</h6>
+
+<h6 id="dog-crossed-boundary">dog crossed boundary?</h6>
+
+<h6 id="additional-info">additional info</h6>
+
+<h6 id="notification-preference-emailphonesms">notification preference ( email,phone,SMS)</h6>
+
+<h4 id="example-request-18">example request</h4>
+
+<pre class="shell"><code>curl -H "Accept: application/xml" -X POST -d "date":"...","time":"..." ... https://www.caninecompany.com/api/v1/fence_service/booking
+</code></pre>
+
+<h4 id="response-18">response</h4>
+
+<pre><code>&lt;xml&gt;
+    &lt;status&gt;success&lt;/status&gt;
+    &lt;confirmation_number&gt;...&lt;/confirmation_number&gt;
+&lt;/xml&gt;
+</code></pre>
+
+<h2 id="spa">Spa</h2>
+
+<h2 id="GET-/spa_service/available_dates">GET /spa<em>service/available</em>dates</h2>
+
+<h4 id="parameters-8">Parameters</h4>
+
+<h6 id="zipcode">zipcode</h6>
+
+<h6 id="dog_id-one-or-more">dog_id - one or more</h6>
+
+<p>Gets the available date/time for Spa service.</p>
+
+<h4 id="example-request-19">example request</h4>
+
+<pre class="shell"><code>curl -H "Authentication:..." -H "Accept: application/xml" https://www.caninecompany.com/api/v1/spa_service/available_dates?zipcode=...&amp;dog_id=[...]
+</code></pre>
+
+<h4 id="response-19">response</h4>
+
+<pre><code>&lt;xml&gt;
+    &lt;status&gt;success&lt;/status&gt;
+    &lt;available_datetime&gt;...&lt;/available_datetime&gt;
+    &lt;cost&gt;...&lt;/cost&gt;
+    ...
+&lt;/xml&gt;
+</code></pre>
+
+<h2 id="GET-/spa_service/available_addons">GET /spa<em>service/available</em>addons</h2>
+
+<h4 id="parameters-9">Parameters</h4>
+
+<h6 id="zipcode-2">zipcode</h6>
+
+<h6 id="dogid">dogid</h6>
+
+<p>Gets the available addon services.</p>
+
+<h4 id="example-request-20">example request</h4>
+
+<pre class="shell"><code>curl -H "Authentication:..." -H "Accept: application/xml" https://www.caninecompany.com/api/v1/spa_service/available_addons?zipcode=...
+</code></pre>
+
+<h4 id="response-20">response</h4>
+
+<pre><code>&lt;xml&gt;
+    &lt;status&gt;success&lt;/status&gt;
+    &lt;services&gt;
+    ...
+    &lt;/services&gt;
+&lt;/xml&gt;
+</code></pre>
+
+<h2 id="POST-/spa_service/lock_time">POST /spa<em>service/lock</em>time</h2>
+
+<p>Service used to temporarily lock the appointment time while the user is entering other details.</p>
+
+<h4 id="parameters-10">Parameters</h4>
+
+<h6 id="date-4">date</h6>
+
+<h6 id="time-4">time</h6>
+
+<h4 id="example-request-21">example request</h4>
+
+<pre class="shell"><code>curl -H "Accept: application/xml" -X POST -d "date":"...","time":"..." ... https://www.caninecompany.com/api/v1/spa_service/lock_time
+</code></pre>
+
+<h4 id="response-21">response</h4>
+
+<pre><code>&lt;xml&gt;
+    &lt;status&gt;success&lt;/status&gt;
+&lt;/xml&gt;
+</code></pre>
+
+<h2 id="POST-/spa_service/unlock_time">POST /spa<em>service/unlock</em>time</h2>
+
+<p>Service used to unlock the appointment time if the user cancels the process.</p>
+
+<h4 id="parameters-11">Parameters</h4>
+
+<h6 id="date-5">date</h6>
+
+<h6 id="time-5">time</h6>
+
+<h4 id="example-request-22">example request</h4>
+
+<pre class="shell"><code>curl -H "Accept: application/xml" -X POST -d "date":"...","time":"..." ... https://www.caninecompany.com/api/v1/spa_service/unlock_time
+</code></pre>
+
+<h4 id="response-22">response</h4>
+
+<pre><code>&lt;xml&gt;
+    &lt;status&gt;success&lt;/status&gt;
+&lt;/xml&gt;
+</code></pre>
+
+<h2 id="POST-/spa_service/booking"><span class="method justendpoint"><span class="endpoint"><span class="verb">POST</span> <span class="path">/spa_service/booking</span></span></span></h2>
+
+<p>Service used to create a new Spa appointment.</p>
+
+<h4 id="parameters-12">Parameters</h4>
+
+<h6 id="date-6">date</h6>
+
+<h6 id="time-6">time</h6>
+
+<h6 id="pets">pets</h6>
+
+<h6 id="addon">addon</h6>
+
+<h6 id="additional-info-2">additional info</h6>
+
+<h6 id="notification-preference-emailphonesms-2">notification preference ( email,phone,SMS)</h6>
+
+<h4 id="example-request-23">example request</h4>
+
+<pre class="shell"><code>curl -H "Accept: application/xml" -X POST -d "date":"...","time":"..." ... https://www.caninecompany.com/api/v1/spa_service/booking
+</code></pre>
+
+<h4 id="response-23">response</h4>
+
+<pre><code>&lt;xml&gt;
+    &lt;status&gt;success&lt;/status&gt;
+    &lt;confirmation_number&gt;...&lt;/confirmation_number&gt;
+&lt;/xml&gt;
+</code></pre>
+
+<h1 id="notifications">Notifications</h1>
+
+<h2 id="GET-/notifications"><span class="method justendpoint"><span class="endpoint"><span class="verb">GET</span> <span class="path">/notifications</span></span></span></h2>
+
+<p>Gets notifications for the user. This will be called periodically from the app server. This will be used to retrieve Flash sales, promotional offers, Rep job completion status, battery, service plan renewal notifications, Rep arrival time and Seasonal alerts.</p>
+
+<h4 id="example-request-24">example request</h4>
+
+<pre class="shell"><code>curl -H "Authentication: hmac auth token digest" -H "Accept: application/xml" https://www.caninecompany.com/api/v1/notifications
+</code></pre>
+
+<h4 id="response-24">response</h4>
+
+<pre><code>&lt;xml&gt;
+    &lt;status&gt;success&lt;/status&gt;
+    &lt;notifications&gt;
+    &lt;notification&gt;
+    &lt;image&gt;...&lt;/image&gt;
+    &lt;message&gt;...&lt;/message&gt;
+    &lt;type&gt;...&lt;/type&gt;
+    &lt;link&gt;...&lt;/link&gt;
+    ...
+    &lt;/notification&gt;
+    ...
+    &lt;/notifications&gt;
+&lt;/xml&gt;
+</code></pre>
+
+<h1 id="tips-tricks">Tips &amp; Tricks</h1>
+
+<h2 id="GET-/tips"><span class="method justendpoint"><span class="endpoint"><span class="verb">GET</span> <span class="path">/tips</span></span></span></h2>
+
+<p>Retrieves Tips &amp; Tricks </p>
+
+<h4 id="example-request-25">example request</h4>
+
+<pre class="shell"><code>curl -H "Authentication: hmac auth token digest" -H "Accept: application/xml" https://www.caninecompany.com/api/v1/tips
+</code></pre>
+
+<h4 id="response-25">response</h4>
+
+<pre><code>&lt;xml&gt;
+    &lt;status&gt;success&lt;/status&gt;
+    &lt;tips&gt;
+    &lt;tip&gt;
+    &lt;image&gt;...&lt;/image&gt;
+    &lt;message&gt;...&lt;/message&gt;
+    &lt;type&gt;...&lt;/type&gt;
+    &lt;link&gt;...&lt;/link&gt;
+    ...
+    &lt;/tip&gt;
+    ...
+    &lt;/tips&gt;
+&lt;/xml&gt;
+</code></pre>
+
+<h1 id="seasonal-information">Seasonal Information</h1>
+
+<h2 id="GET-/seasonalinfo"><span class="method justendpoint"><span class="endpoint"><span class="verb">GET</span> <span class="path">/seasonalinfo</span></span></span></h2>
+
+<p>Retrieves Seasonal Info</p>
+
+<h4 id="example-request-26">example request</h4>
+
+<pre class="shell"><code>curl -H "Authentication: hmac auth token digest" -H "Accept: application/xml" https://www.caninecompany.com/api/v1/seasonalinfo
+</code></pre>
+
+<h4 id="response-26">response</h4>
+
+<pre><code>&lt;xml&gt;
+    &lt;status&gt;success&lt;/status&gt;
+    &lt;items&gt;
+    &lt;item&gt;
+    &lt;name&gt;...&lt;/name&gt;
+    &lt;image&gt;...&lt;/image&gt;
+    &lt;desc&gt;...&lt;/desc&gt;
+    &lt;type&gt;...&lt;/type&gt;
+    &lt;link&gt;...&lt;/link&gt;
+    ...
+    &lt;/item&gt;
+    ...
+    &lt;/items&gt;
+&lt;/xml&gt;
+</code></pre>
+
+<h1 id="photo-fun">Photo Fun</h1>
+
+<h2 id="POST-/photo"><span class="method justendpoint"><span class="endpoint"><span class="verb">POST</span> <span class="path">/photo</span></span></span></h2>
+
+<p>Uploads photo to CC for approval</p>
+
+<h4 id="parameters-13">Parameters</h4>
+
+<h6 id="image-file">image file</h6>
+
+<h4 id="example-request-27">example request</h4>
+
+<pre class="shell"><code>curl -H "Accept: application/xml" -X POST -d "name":"...","desc":"..." --data-binary @"...image file path..." https://www.caninecompany.com/api/v1/photo
+</code></pre>
+
+<h4 id="response-27">response</h4>
+
+<pre><code>&lt;xml&gt;
+    &lt;status&gt;success&lt;/status&gt;
+&lt;/xml&gt;
+</code></pre>
+
+<h1 id="pet-friendly-locations">Pet friendly locations</h1>
+
+<h2 id="GET-/petfriendlylocations"><span class="method justendpoint"><span class="endpoint"><span class="verb">GET</span> <span class="path">/petfriendlylocations</span></span></span></h2>
+
+<p>Retrieves Pet friendly locations</p>
+
+<h4 id="parameters-14">Parameters</h4>
+
+<h6 id="latitude">latitude</h6>
+
+<h6 id="longitude">longitude</h6>
+
+<h4 id="example-request-28">example request</h4>
+
+<pre class="shell"><code>curl -H "Authentication:..." -H "Accept: application/xml" https://www.caninecompany.com/api/v1/petfriendlylocations?latitude=...&amp;longitude=...
+</code></pre>
+
+<h4 id="response-28">response</h4>
+
+<pre><code>&lt;xml&gt;
+    &lt;status&gt;success&lt;/status&gt;
+    &lt;locations&gt;
+        &lt;location&gt;...&lt;/location&gt;
+    ...
+    &lt;/locations&gt;
+&lt;/xml&gt;
+</code></pre>
+
+<h2 id="POST-/petfriendlylocation"><span class="method justendpoint"><span class="endpoint"><span class="verb">POST</span> <span class="path">/petfriendlylocation</span></span></span></h2>
+
+<p>Uploads pet friendly location details</p>
+
+<h4 id="parameters-15">Parameters</h4>
+
+<h6 id="name-4">name</h6>
+
+<h6 id="type-restaurant-dog-park-hotel-beaches-national-park-other">type ( Restaurant, dog park, hotel, beaches, national park, other ...)</h6>
+
+<h6 id="address-2">address</h6>
+
+<h4 id="example-request-29">example request</h4>
+
+<pre class="shell"><code>curl -H "Accept: application/xml" -X POST -d "name":"...","type":"..." ...  https://www.caninecompany.com/api/v1/petfriendlylocation
+</code></pre>
+
+<h4 id="response-29">response</h4>
+
+<pre><code>&lt;xml&gt;
+    &lt;status&gt;success&lt;/status&gt;
+&lt;/xml&gt;
+</code></pre>
+
+    </div> <!-- #content -->
+<script type="text/javascript" charset="utf-8">
+$(function() {
+    var headerHeight = $("#header").height();
+
+    var sections = $("#content h1[id], #content h2[id]");
+    var sectionOffsets = [];
+    var slack = 100;  // Give the section scroll some slack (in pixels).
+    sections.each(function(elem) {
+        sectionOffsets.push($(this).offset().top - headerHeight - slack);
+    });
+
+    var currSectionIdx = -1;
+    function getSectionIdx(scrollDistance) {
+        if (scrollDistance < sectionOffsets[0]) {
+            return -1;
+        } else {
+            for (var id = sectionOffsets.length; id > 0; id--) {
+                if (scrollDistance > sectionOffsets[id - 1]) {
+                    return id - 1;
+                    break;
+                }
+            }
+        }
+    }
+
+    /** {{{ http://code.activestate.com/recipes/577787/ (r2) */
+    _slugify_strip_re = /[^\w\s-]/g;
+    _slugify_hyphenate_re = /[-\s]+/g;
+    function slugify(s) {
+      s = s.replace(_slugify_strip_re, '').trim().toLowerCase();
+      s = s.replace(_slugify_hyphenate_re, '-');
+      return s;
+    }
+    /** end of http://code.activestate.com/recipes/577787/ }}} */
+
+    /* See <https://github.com/trentm/restdown/issues/11>. */
+    function safechars(s) {
+      return s.replace(_slugify_strip_re, '');
+    }
+
+    $("#content").scroll(function() {
+        var scrollDistance = $("#content").scrollTop();
+        var sectionIdx = getSectionIdx(scrollDistance);
+
+        if (sectionIdx !== currSectionIdx) {
+            $("#sidebar li>div").removeClass("current");
+            currSectionIdx = sectionIdx;
+            if (currSectionIdx >= 0) {
+                var heading = $(sections[currSectionIdx]).text();
+                var possibleAnchors = [
+                    slugify(heading), // h1 or non-method h2
+                    heading.replace(/ /g, '-'), // h2 method, just name or just endpoint
+                    heading.slice(0, heading.lastIndexOf(' (')).trimRight().replace(/ /g, '-'), // h2 method, name and endpoint
+                ];
+                for (var i=0; i < possibleAnchors.length; i++) {
+                    var anchor = safechars(possibleAnchors[i]);
+                    try {
+                        $("#sidebar a[href=#" + anchor + "]").parent().addClass("current");
+                    } catch (e) {
+                        /* Ignore error if no such element. */
+                        console.log(e)
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
+
+</body>
+</html>
