@@ -1,8 +1,4 @@
----
-title: Canine Company Mobile App API
-mediaroot: media
-markdown2extras: wiki-tables
----
+
 # Canine Company API requirements for communicating with the Datacenter.
 
 ### All API calls start with a base URL
